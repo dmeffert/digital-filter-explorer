@@ -1,0 +1,67 @@
+<!DOCTYPE html>  <html> <head>   <title>audio.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" />   <script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: {inlineMath: [['$','$']]} });</script>   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full"></script> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="audio.html">                 audio.js               </a>                                           <a class="source" href="complex.html">                 complex.js               </a>                                           <a class="source" href="filter.html">                 filter.js               </a>                                           <a class="source" href="main.html">                 main.js               </a>                                           <a class="source" href="presets.html">                 presets.js               </a>                                           <a class="source" href="ui-audio.html">                 ui-audio.js               </a>                                           <a class="source" href="ui-displays.html">                 ui-displays.js               </a>                                           <a class="source" href="ui-presets.html">                 ui-presets.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               audio.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p>This module provides the interface to the Web Audio API. It handles the playback of the audio 
+clips that are processed by the filters we design.</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre>
+<span class="nx">define</span><span class="p">(</span>
+    <span class="p">[],</span>
+    <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="kd">var</span> <span class="nx">audio</span> <span class="o">=</span> <span class="p">{</span>
+
+        <span class="nx">processor</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nx">source</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nx">context</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nx">buffers</span><span class="o">:</span> <span class="p">[],</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Attempts to initialize the audio context, and creates a script processor node 
+which will be responsible for the actual signal processing. The <code>processs</code> callback
+is the method which runs the currently active filter over the queued audio buffer.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+        <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">process</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">webkitAudioContext</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">webkitAudioContext</span><span class="p">();</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">processor</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">createScriptProcessor</span><span class="p">(</span><span class="mi">2048</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">processor</span><span class="p">.</span><span class="nx">onaudioprocess</span> <span class="o">=</span> <span class="nx">process</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">processor</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">destination</span><span class="p">);</span>
+                <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#web-audio-enabled&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Asynchronously loads an audio file with URI given by <code>file</code> and stores it in the 
+dictionary of audio buffers. <code>success</code> is an optional callback function to run 
+when the loading was successful.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+        <span class="nx">loadAudio</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+            <span class="nx">request</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+            <span class="nx">request</span><span class="p">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="s1">&#39;arraybuffer&#39;</span><span class="p">;</span>
+            <span class="nx">request</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">decodeAudioData</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span>
+                    <span class="kd">function</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">self</span><span class="p">.</span><span class="nx">buffers</span><span class="p">[</span><span class="nx">file</span><span class="p">]</span> <span class="o">=</span> <span class="nx">buffer</span><span class="p">;</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="nx">success</span><span class="p">();</span>
+                    <span class="p">}</span>
+                <span class="p">);</span>
+            <span class="p">};</span>
+            <span class="nx">request</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+        <span class="p">},</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Stops the current playback, and starts the playback of the audio file with URI given by 
+<code>file</code>, hooking it up to the script processor that runs the currently active filter. 
+There is no playback if the audio clip could not be found in the audio buffer dictionary.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+        <span class="nx">playAudio</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">source</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">stop</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">buffers</span><span class="p">[</span><span class="nx">file</span><span class="p">])</span> <span class="k">return</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">source</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">createBufferSource</span><span class="p">();</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">buffer</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">buffers</span><span class="p">[</span><span class="nx">file</span><span class="p">];</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">processor</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="p">},</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Stops the current playback.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+        <span class="nx">stopAudio</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">source</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">stop</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="nx">audio</span><span class="p">;</span>
+<span class="p">});</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

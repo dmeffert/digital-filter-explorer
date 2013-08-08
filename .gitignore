@@ -1,8 +1,13 @@
-docs
 design
 -p
 audio/source
 node_modules
-css/*.min.css
-js/*.min.js
+css/*
+js/*
+!css/filter-explorer.min.css
+!js/filter-explorer.min.js
 *.sublime*
+*.jst
+Gruntfile.js
+package.json
+README.md

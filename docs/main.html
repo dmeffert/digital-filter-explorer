@@ -1,0 +1,65 @@
+<!DOCTYPE html>  <html> <head>   <title>main.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" />   <script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: {inlineMath: [['$','$']]} });</script>   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full"></script> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="audio.html">                 audio.js               </a>                                           <a class="source" href="complex.html">                 complex.js               </a>                                           <a class="source" href="filter.html">                 filter.js               </a>                                           <a class="source" href="main.html">                 main.js               </a>                                           <a class="source" href="presets.html">                 presets.js               </a>                                           <a class="source" href="ui-audio.html">                 ui-audio.js               </a>                                           <a class="source" href="ui-displays.html">                 ui-displays.js               </a>                                           <a class="source" href="ui-presets.html">                 ui-presets.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               main.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nx">requirejs</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+    <span class="nx">baseUrl</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="p">,</span>
+    <span class="nx">shim</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s1">&#39;jquery&#39;</span><span class="o">:</span> <span class="p">{</span> <span class="nx">exports</span><span class="o">:</span> <span class="s1">&#39;$&#39;</span> <span class="p">},</span>
+        <span class="s1">&#39;jquery.ui&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;jquery&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;underscore&#39;</span><span class="o">:</span> <span class="p">{</span> <span class="nx">exports</span><span class="o">:</span> <span class="s1">&#39;_&#39;</span> <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s1">&#39;jquery&#39;</span><span class="o">:</span> <span class="s1">&#39;lib/jquery-2.0.2.min&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;jquery.ui&#39;</span><span class="o">:</span> <span class="s1">&#39;lib/jquery-ui-1.10.3.min&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;underscore&#39;</span><span class="o">:</span> <span class="s1">&#39;lib/underscore&#39;</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>This module is the entry point of the app. It initializes all user interface components, 
+initializes the audio system and loads the audio clips.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+
+</pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre>
+<span class="nx">require</span><span class="p">(</span>
+    <span class="p">[</span><span class="s1">&#39;ui-audio&#39;</span><span class="p">,</span> <span class="s1">&#39;ui-displays&#39;</span><span class="p">,</span> <span class="s1">&#39;ui-presets&#39;</span><span class="p">,</span> <span class="s1">&#39;audio&#39;</span><span class="p">,</span> <span class="s1">&#39;filter&#39;</span><span class="p">,</span> <span class="s1">&#39;presets&#39;</span><span class="p">],</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">uiAudio</span><span class="p">,</span> <span class="nx">uiDisplays</span><span class="p">,</span> <span class="nx">uiPresets</span><span class="p">,</span> <span class="nx">audio</span><span class="p">,</span> <span class="nx">filter</span><span class="p">,</span> <span class="nx">presets</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Prevent the user from selecting text.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">onselectstart</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">};</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Initialize to a filter that does nothing.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="nx">filter</span><span class="p">.</span><span class="nx">compute</span><span class="p">({</span> <span class="nx">zeros</span><span class="o">:</span> <span class="p">[],</span> <span class="nx">poles</span><span class="o">:</span> <span class="p">[]</span> <span class="p">});</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Initialize the user interface.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="nx">uiAudio</span><span class="p">.</span><span class="nx">setup</span><span class="p">();</span>
+    <span class="nx">uiDisplays</span><span class="p">.</span><span class="nx">setup</span><span class="p">();</span>
+    <span class="nx">uiPresets</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="nx">uiDisplays</span><span class="p">.</span><span class="nx">repaint</span><span class="p">);</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>Callback function for the script processor. It applies the <code>process</code> function of the current 
+filter to all sample frames.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">process</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">leftIn</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">inputBuffer</span><span class="p">.</span><span class="nx">getChannelData</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">rightIn</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">inputBuffer</span><span class="p">.</span><span class="nx">getChannelData</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">leftOut</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">outputBuffer</span><span class="p">.</span><span class="nx">getChannelData</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">rightOut</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">outputBuffer</span><span class="p">.</span><span class="nx">getChannelData</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">leftIn</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="nx">filter</span><span class="p">.</span><span class="nx">process</span><span class="p">(</span><span class="nx">leftIn</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">rightIn</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+            <span class="nx">leftOut</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">out</span><span class="p">.</span><span class="nx">left</span><span class="p">;</span>
+            <span class="nx">rightOut</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">out</span><span class="p">.</span><span class="nx">right</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">audioFiles</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;audio/funkyguitar.mp3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;audio/saxophone.mp3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;audio/jazzpiano.mp3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;audio/ocean.mp3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;audio/breaks.mp3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;audio/hiphopbeat.mp3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;audio/drumnbass.mp3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;audio/psytrance.mp3&#39;</span>
+    <span class="p">];</span>
+    <span class="nx">audio</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">process</span><span class="p">);</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">audioFiles</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">audioFile</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">audio</span><span class="p">.</span><span class="nx">loadAudio</span><span class="p">(</span><span class="nx">audioFile</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

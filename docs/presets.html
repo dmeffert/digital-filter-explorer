@@ -1,0 +1,300 @@
+<!DOCTYPE html>  <html> <head>   <title>presets.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" />   <script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: {inlineMath: [['$','$']]} });</script>   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full"></script> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="audio.html">                 audio.js               </a>                                           <a class="source" href="complex.html">                 complex.js               </a>                                           <a class="source" href="filter.html">                 filter.js               </a>                                           <a class="source" href="main.html">                 main.js               </a>                                           <a class="source" href="presets.html">                 presets.js               </a>                                           <a class="source" href="ui-audio.html">                 ui-audio.js               </a>                                           <a class="source" href="ui-displays.html">                 ui-displays.js               </a>                                           <a class="source" href="ui-presets.html">                 ui-presets.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               presets.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p>This module supplies the functions to create the filter presets. The moving average, leaky
+integrator and comb filter are designed directly as digital filters. The Butterworth, Chebyshev
+and Bessel filters are designed from their analog prototype and then converted to digital form
+using the bilinear transform.</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre>
+<span class="nx">define</span><span class="p">(</span>
+    <span class="p">[</span><span class="s1">&#39;underscore&#39;</span><span class="p">,</span> <span class="s1">&#39;complex&#39;</span><span class="p">],</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">Complex</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h3>Math functions</h3>
+
+<p>First we add the extra trigonometric and hyperbolic functions we will need to the global 
+<code>Math</code> object.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+
+</pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>The cotangent is given by: $$\cot(\theta) = \frac{1}{\tan(\theta)}$$</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="nb">Math</span><span class="p">.</span><span class="nx">cot</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cot</span> <span class="o">||</span> <span class="kd">function</span><span class="p">(</span><span class="nx">theta</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">tan</span><span class="p">(</span><span class="nx">theta</span><span class="p">);</span>
+    <span class="p">};</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>The area hyperbolic sine is given by: $$\operatorname{arsinh}(x) = \ln \left(x + \sqrt{x^{2} + 1} \right)$$</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="nb">Math</span><span class="p">.</span><span class="nx">arsinh</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">arsinh</span> <span class="o">||</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="p">};</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>The hyperbolic sine is given by: $$\sinh x = \frac {e^x - e^{-x}} {2}$$</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="nb">Math</span><span class="p">.</span><span class="nx">sinh</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sinh</span> <span class="o">||</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="o">-</span><span class="nx">x</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">};</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>The hyperbolic cosine is given by: $$\cosh x = \frac {e^x + e^{-x}} {2}$$</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="nb">Math</span><span class="p">.</span><span class="nx">cosh</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cosh</span> <span class="o">||</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="o">-</span><span class="nx">x</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+</pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h3>Bilinear transform</h3>
+
+<p>The <em>bilinear transformation</em> is a mapping from the "analog" $s$-plane to the "digital" 
+$z$-plane, characterized by:
+    $$s \mapsto \frac{1 + s/c}{1 - s/c}$$ 
+where $c > 0$. Under this transformation, the $i\Omega$ axis from $\Omega = -\infty$ to 
+$+\infty$ gets mapped to the $e^{i\omega}$ unit circle from $\omega = -\pi$ to $+\pi$ exactly 
+once. The relationship between $\Omega$ and $\omega$ under this mapping is non-linear, but 
+we can make sure that the point corresponding to the frequency $\Omega_c = 1$ rad/sec is 
+always mapped to a specific digital frequency of our choosing, namely $\omega_c = $ 
+<code>prewarpFrequency</code> by picking:
+    $$c = \cot \frac{\omega_c}{2}$$</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">bilinearTransform</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">prewarpFrequency</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">cot</span><span class="p">(</span><span class="nx">prewarpFrequency</span> <span class="o">/</span> <span class="mi">2</span><span class="p">));</span>
+        <span class="kd">var</span> <span class="nx">sc</span> <span class="o">=</span> <span class="nx">Complex</span><span class="p">.</span><span class="nx">divide</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">c</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">Complex</span><span class="p">.</span><span class="nx">divide</span><span class="p">(</span>
+            <span class="nx">Complex</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="nx">sc</span><span class="p">),</span>
+            <span class="nx">Complex</span><span class="p">.</span><span class="nx">subtract</span><span class="p">(</span><span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="nx">sc</span><span class="p">)</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h3>Highpass transform</h3>
+
+<p>This function maps the $z$-plane zeros and poles from a lowpass design to a highpass design
+by negating them, effectively "flipping" the frequency response around $\frac{\pi}{2}$.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">highpassTransform</span><span class="p">(</span><span class="nx">roots</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">roots</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">z</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">z</span><span class="p">.</span><span class="nx">negation</span><span class="p">();</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">presets</span> <span class="o">=</span> <span class="p">{</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h3>Moving average filter</h3>
+
+<p>The <em>moving average</em> filter is one the easiest digital filters to understand. The output
+signal is simply the average of a number of consecutive points of the input signal. Thus, 
+for $k$ points we can describe the operation of the filter by the equation:
+    $$y[n] = \frac{1}{k}\sum_{i=0}^{k-1}x[n-i]$$
+This corresponds to the following transfer function:
+    $$H(z) = \frac{1 + z + z^2 + ... + z^k}{z^k}$$</p>             </td>             <td class="code">               <div class="highlight"><pre>
+        <span class="nx">movingAverage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">zeros</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">k</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">z</span> <span class="o">=</span> <span class="nx">Complex</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="nx">k</span><span class="p">));</span>
+                <span class="nx">zeros</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">z</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="nx">zeros</span><span class="o">:</span> <span class="nx">zeros</span><span class="p">,</span>
+                <span class="nx">poles</span><span class="o">:</span> <span class="p">[]</span>
+            <span class="p">};</span>
+        <span class="p">},</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h3>Leaky integrator</h3>
+
+<p>The <em>leaky integrator</em> allows us to calculate the smoothed version of a sequence in a
+recursive fashion. It is given by the equation:
+    $$y[n] = \lambda y[n-1] + (1 - \lambda)x[n]$$
+Which corresponds to the following transfer function:
+    $$H(z) = \frac{1-\lambda}{1 - \lambda z^{-1}}$$</p>             </td>             <td class="code">               <div class="highlight"><pre>
+        <span class="nx">leakyIntegrator</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lambda</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="nx">zeros</span><span class="o">:</span> <span class="p">[],</span>
+                <span class="nx">poles</span><span class="o">:</span>  <span class="p">[</span><span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="nx">lambda</span><span class="p">)]</span>
+            <span class="p">};</span>
+        <span class="p">},</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <h3>Butterworth filter</h3>
+
+<p>The <em>Butterworth</em> filter has the flattest obtainable magnitude reponse in the passband,
+with monotonic decrease of magnitude. Its analog transfer function is characterized by 
+the following magnitude response:
+    $$|H_a(i\Omega)| = \sqrt{\frac{1}{1 + (\Omega^{2n}/\Omega_c)}}$$
+We design the filter to have an analog cutoff frequency $\Omega_c = 1$ and map this frequency 
+to the desired digital cutoff frequency $\omega_c$ with the bilinear transform.</p>
+
+<p>The poles are located at $e^{-i\theta_k}$ for $k = 0, 1, ... n-1$ where 
+    $$\theta_k = \frac{\pi}{2} + \frac{(2 + k + 1)\pi}{2n}$$</p>             </td>             <td class="code">               <div class="highlight"><pre>
+        <span class="nx">butterworth</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cutoff</span><span class="p">,</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">lowpass</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="nx">cutoff</span> <span class="o">=</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="nx">cutoff</span> <span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">-</span> <span class="nx">cutoff</span><span class="p">;</span>
+
+            <span class="kd">var</span> <span class="nx">zeros</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">poles</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">theta</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">n</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">s_k</span> <span class="o">=</span> <span class="nx">Complex</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="nx">theta</span><span class="p">));</span>
+                <span class="kd">var</span> <span class="nx">pole</span> <span class="o">=</span> <span class="nx">bilinearTransform</span><span class="p">(</span><span class="nx">s_k</span><span class="p">,</span> <span class="nx">cutoff</span><span class="p">);</span>
+                <span class="nx">zeros</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+                <span class="nx">poles</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">pole</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="nx">zeros</span><span class="o">:</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="nx">zeros</span> <span class="o">:</span> <span class="nx">highpassTransform</span><span class="p">(</span><span class="nx">zeros</span><span class="p">),</span>
+                <span class="nx">poles</span><span class="o">:</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="nx">poles</span> <span class="o">:</span> <span class="nx">highpassTransform</span><span class="p">(</span><span class="nx">poles</span><span class="p">),</span>
+                <span class="nx">normalize</span><span class="o">:</span> <span class="p">{</span> <span class="nx">frequency</span><span class="o">:</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">,</span> <span class="nx">gain</span><span class="o">:</span> <span class="mi">1</span> <span class="p">}</span>
+            <span class="p">};</span>
+        <span class="p">},</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <h3>Chebyshev filter</h3>
+
+<p><em>Chebyshev</em> Type I filters have a better rate of attenuation beyond the passband, at the 
+cost of a ripple in the passband (or in the stopband, for Type II filters). The Chebyshev 
+Type I filter is characterized by the following magnitude response:
+    $$|H_a(i\Omega)| = \frac{1}{\sqrt{1 + \varepsilon^2T^2_n(\Omega/\Omega_c)}}$$
+where $T_n$ is the Chebyshev polynomial of order $n$.</p>
+
+<p>Just like with the Butterworth filter, we design the filter to have an analog cutoff frequency 
+$\Omega_c = 1$ and map this frequency to the desired digital cutoff frequency 
+$\omega_c$ with the bilinear transform.</p>
+
+<p>The poles are located at:
+    $$\sinh(\frac{1}{n}\operatorname{arsinh}(\frac{1}{\varepsilon}))\sin(\theta_m) + \\
+      i \cosh(\frac{1}{n}\operatorname{arsinh}(\frac{1}{\varepsilon}))\cos(\theta_m)$$
+for $m = 1, 2, ..., n$ where
+    $$\theta_m = \frac{\pi}{2}\frac{2m-1}{n}$$</p>             </td>             <td class="code">               <div class="highlight"><pre>
+        <span class="nx">chebyshevTypeI</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cutoff</span><span class="p">,</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">ripple</span><span class="p">,</span> <span class="nx">lowpass</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="kd">var</span> <span class="nx">epsilon</span> <span class="o">=</span> <span class="nx">ripple</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">arsinh</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="nx">epsilon</span><span class="p">)</span> <span class="o">/</span> <span class="nx">n</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">sinh</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sinh</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">cosh</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cosh</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+
+            <span class="nx">cutoff</span> <span class="o">=</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="nx">cutoff</span> <span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">-</span> <span class="nx">cutoff</span><span class="p">;</span>
+
+            <span class="kd">var</span> <span class="nx">zeros</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">poles</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">m</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">m</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">theta_m</span> <span class="o">=</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nx">n</span><span class="p">;</span>
+                <span class="kd">var</span> <span class="nx">s_pm</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="nx">sinh</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">theta_m</span><span class="p">),</span> <span class="nx">cosh</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">theta_m</span><span class="p">));</span>
+                <span class="kd">var</span> <span class="nx">pole</span> <span class="o">=</span> <span class="nx">bilinearTransform</span><span class="p">(</span><span class="nx">s_pm</span><span class="p">,</span> <span class="nx">cutoff</span><span class="p">);</span>
+                <span class="nx">zeros</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+                <span class="nx">poles</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">pole</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="nx">zeros</span><span class="o">:</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="nx">zeros</span> <span class="o">:</span> <span class="nx">highpassTransform</span><span class="p">(</span><span class="nx">zeros</span><span class="p">),</span>
+                <span class="nx">poles</span><span class="o">:</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="nx">poles</span> <span class="o">:</span> <span class="nx">highpassTransform</span><span class="p">(</span><span class="nx">poles</span><span class="p">),</span>
+                <span class="nx">normalize</span><span class="o">:</span> <span class="p">{</span> <span class="nx">frequency</span><span class="o">:</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="nx">cutoff</span> <span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">,</span> <span class="nx">gain</span><span class="o">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nx">epsilon</span> <span class="o">*</span> <span class="nx">epsilon</span><span class="p">)</span> <span class="p">}</span>
+            <span class="p">};</span>
+        <span class="p">},</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h3>Bessel filter</h3>
+
+<p>In the analog domain the <em>Bessel</em> filter is characterized by having the most linear phase 
+response. This advantage does not really translate all that well to the digital domain, 
+where it is possible to design FIR filters with exact linear phase. </p>
+
+<p>The analog transfer function of the Bessel filter is:
+    $$H_a(s) = \frac{\theta_n(0)}{\theta_n(s / \Omega_c)}$$
+where $\theta_n(s)$ is the $n$th order reverse Bessel polynomial given by
+    $$\theta_n(s) = \sum_{k=0}^n \frac{s^k(2n - k)!}{2^{n-k}!(n-k)!}$$</p>
+
+<p>Again, we design the filter to have an analog cutoff frequency $\Omega_c = 1$ and map this 
+frequency to the desired digital cutoff frequency $\omega_c$ with the bilinear transform.</p>
+
+<p>Since there is no straightforward explicit expression for the roots of Bessel polynomials 
+they are precomputed using a polynomial root finder and directly included in the source code.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+        <span class="nx">bessel</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cutoff</span><span class="p">,</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">lowpass</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="kd">var</span> <span class="nx">factorial</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">memoize</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">return</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nx">n</span><span class="p">;</span>
+            <span class="p">});</span>
+
+            <span class="kd">function</span> <span class="nx">reverseBesselCoefficient</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">n</span> <span class="o">+</span> <span class="nx">k</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nx">k</span><span class="p">)</span> <span class="o">*</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">k</span><span class="p">)</span> <span class="o">*</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="nx">k</span><span class="p">));</span>
+            <span class="p">}</span>
+
+            <span class="kd">function</span> <span class="nx">logReverseBesselPolynomial</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">reverseBesselCoefficient</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="nx">n</span><span class="p">));</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="kd">var</span> <span class="nx">reverseBesselRoots</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">[</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">1.00000000000000</span><span class="p">)</span>
+                <span class="p">],</span>
+                <span class="p">[</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">1.50000000000000</span><span class="p">,</span>  <span class="mf">0.866025403784439</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">1.50000000000000</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.866025403784439</span><span class="p">)</span>
+                <span class="p">],</span>
+                <span class="p">[</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">2.32218535462609</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">1.83890732268696</span><span class="p">,</span>  <span class="mf">1.754380959783720</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">1.83890732268696</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.754380959783720</span><span class="p">)</span>
+                <span class="p">],</span>
+                <span class="p">[</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">2.10378939717963</span><span class="p">,</span>  <span class="mf">2.657418041856750</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">2.10378939717963</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.657418041856750</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">2.89621060282037</span><span class="p">,</span>  <span class="mf">0.867234128934507</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">2.89621060282037</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.867234128934507</span><span class="p">)</span>
+                <span class="p">],</span>
+                <span class="p">[</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">3.64673859532965</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">2.32467430318165</span><span class="p">,</span>  <span class="mf">3.57102292033798</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">2.32467430318165</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.57102292033798</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">3.35195639915353</span><span class="p">,</span>  <span class="mf">1.74266141618320</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">3.35195639915353</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.74266141618320</span><span class="p">)</span>
+                <span class="p">],</span>
+                <span class="p">[</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">2.51593224781083</span><span class="p">,</span>  <span class="mf">4.49267295365395</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">2.51593224781083</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.49267295365395</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">3.73570835632581</span><span class="p">,</span>  <span class="mf">2.62627231144713</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">3.73570835632581</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.62627231144713</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">4.24835939586337</span><span class="p">,</span>  <span class="mf">0.86750967323136</span><span class="p">),</span>
+                    <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mf">4.24835939586337</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.86750967323136</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">];</span>
+
+            <span class="nx">cutoff</span> <span class="o">=</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="nx">cutoff</span> <span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">-</span> <span class="nx">cutoff</span><span class="p">;</span>
+
+            <span class="kd">var</span> <span class="nx">zeros</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">poles</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">pole</span> <span class="o">=</span> <span class="nx">bilinearTransform</span><span class="p">(</span><span class="nx">reverseBesselRoots</span><span class="p">[</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="nx">i</span><span class="p">],</span> <span class="nx">cutoff</span><span class="p">);</span>
+                <span class="nx">zeros</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+                <span class="nx">poles</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">pole</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="nx">zeros</span><span class="o">:</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="nx">zeros</span> <span class="o">:</span> <span class="nx">highpassTransform</span><span class="p">(</span><span class="nx">zeros</span><span class="p">),</span>
+                <span class="nx">poles</span><span class="o">:</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="nx">poles</span> <span class="o">:</span> <span class="nx">highpassTransform</span><span class="p">(</span><span class="nx">poles</span><span class="p">),</span>
+                <span class="nx">normalize</span><span class="o">:</span> <span class="p">{</span> <span class="nx">frequency</span><span class="o">:</span> <span class="nx">lowpass</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">,</span> <span class="nx">gain</span><span class="o">:</span> <span class="mi">1</span> <span class="p">}</span>
+            <span class="p">};</span>
+        <span class="p">},</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <h3>Comb filter</h3>
+
+<p>The <em>comb</em> filter comes in two flavors: <em>feedforward</em> and <em>feedbackward</em>. It derives its name from the
+appearance of a comb like shape in the frequency reponse. The feedforward comb filter simply takes
+the input signal and adds to it a scaled and delayed copy of the input signal. Assuming a delay of $k$
+samples and scale factor $\alpha$, the filter can be described by the equation
+    $$y[n] = x[n] + \alpha x[n-k]$$
+and the corresponding transfer function is:
+    $$H(z) = \frac{z^k + \alpha}{z^k}$$
+The feedbackward comb filter takes the input signal and adds to it a delayed copy of the output
+signal. For a delay of $k$ samples and a scale factor $\alpha$, its equation is
+    $$y[n] = x[n] + \alpha y[n-k]$$
+which corresponds to the transfer function:
+    $$H(z) = \frac{z^k}{z^k - \alpha}$$</p>             </td>             <td class="code">               <div class="highlight"><pre>
+        <span class="nx">comb</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">alpha</span><span class="p">,</span> <span class="nx">delay</span><span class="p">,</span> <span class="nx">isFeedForward</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="kd">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="nx">delay</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">alphaKthRoot</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="nx">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="nx">isFeedForward</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">)).</span><span class="nx">root</span><span class="p">(</span><span class="nx">k</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">zeros</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">poles</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">k</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">z</span> <span class="o">=</span> <span class="nx">Complex</span><span class="p">.</span><span class="nx">multiply</span><span class="p">(</span><span class="nx">alphaKthRoot</span><span class="p">,</span> <span class="nx">Complex</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">i</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">/</span> <span class="nx">k</span><span class="p">)));</span>
+                <span class="nx">zeros</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">isFeedForward</span> <span class="o">?</span> <span class="nx">z</span> <span class="o">:</span> <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+                <span class="nx">poles</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">isFeedForward</span> <span class="o">?</span> <span class="k">new</span> <span class="nx">Complex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="nx">z</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="nx">zeros</span><span class="o">:</span> <span class="nx">zeros</span><span class="p">,</span>
+                <span class="nx">poles</span><span class="o">:</span> <span class="nx">poles</span><span class="p">,</span>
+                <span class="nx">normalize</span><span class="o">:</span> <span class="p">{</span> <span class="nx">frequency</span><span class="o">:</span> <span class="nx">alpha</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="nx">k</span> <span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">gain</span><span class="o">:</span> <span class="mi">1</span> <span class="p">}</span>
+            <span class="p">};</span>
+
+        <span class="p">}</span>
+
+    <span class="p">};</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="k">return</span> <span class="nx">presets</span><span class="p">;</span>
+<span class="p">});</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
