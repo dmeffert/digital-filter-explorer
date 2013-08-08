@@ -1,0 +1,8 @@
+docs
+design
+-p
+audio/source
+node_modules
+css/*.min.css
+js/*.min.js
+*.sublime*

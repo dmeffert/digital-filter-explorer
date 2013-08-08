@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Digital Filter Explorer - by Dennis Meffert</title>
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/ui-darkness/jquery-ui-1.10.3.custom.css">
+        <link rel="stylesheet" href="css/main.css">
+        <!-- <link rel="stylesheet" href="css/filter-explorer.min.css"> -->
+    </head>
+    <body>
+        <div class="container">
+            <h1>Digital Filter Explorer</h1>
+            <canvas id="z-plane" width="275px" height="280px"></canvas>
+            <canvas id="magnitude-response" width="390" height="106px"></canvas>
+            <canvas id="phase-response" width="390" height="106px"></canvas>
+
+            <ul class="filter-controls">
+                <li>
+                    <a id="moving-average-select" class="select-button" href="#">Select</a>
+                    <span>Moving average</span>
+                    <div class="filter-type-buttons"></div>
+                    <div id="moving-average-order" class="slider"><div></div></div>
+                </li>
+                <li>
+                    <a id="leaky-integrator-select" class="select-button" href="#">Select</a>
+                    <span>Leaky integrator</span>
+                    <div class="filter-type-buttons"></div>
+                    <div id="leaky-integrator-lambda" class="slider"><div></div></div>
+                </li>
+                <li>
+                    <a id="butterworth-select" class="select-button" href="#">Select</a>
+                    <span>Butterworth</span>
+                    <div class="filter-type-buttons">
+                        <a id="butterworth-lowpass" class="lowpass-button lowpass-button-on" href="#">LP</a>
+                        <a id="butterworth-highpass" class="highpass-button" href="#">HP</a>
+                    </div>
+                    <div id="butterworth-cutoff" class="slider"><div></div></div>
+                    <div id="butterworth-order" class="slider-small"><div></div></div>
+                </li>
+                <li>
+                    <a id="chebyshevI-select" class="select-button" href="#">Select</a>
+                    <span>Chebyshev Type I</span>
+                    <div class="filter-type-buttons">
+                        <a id="chebyshevI-lowpass" class="lowpass-button lowpass-button-on" href="#">LP</a>
+                        <a id="chebyshevI-highpass" class="highpass-button" href="#">HP</a>
+                    </div>
+                    <div id="chebyshevI-cutoff" class="slider"><div></div></div>
+                    <div id="chebyshevI-order" class="slider-small"><div></div></div>
+                    <div id="chebyshevI-ripple" class="slider-small"><div></div></div>
+                </li>
+                <li>
+                    <a id="bessel-select" class="select-button" href="#">Select</a>
+                    <span>Bessel</span>
+                    <div class="filter-type-buttons">
+                        <a id="bessel-lowpass" class="lowpass-button lowpass-button-on" href="#">LP</a>
+                        <a id="bessel-highpass" class="highpass-button" href="#">HP</a>
+                    </div>
+                    <div id="bessel-cutoff" class="slider"><div></div></div>
+                    <div id="bessel-order" class="slider-small"><div></div></div>
+                </li>
+                <li>
+                    <a id="comb-select" class="select-button" href="#">Select</a>
+                    <span>Comb</span>
+                    <div class="filter-type-buttons">
+                        <a id="comb-feedforward" class="feedforward-button feedforward-button-on" href="#">+</a>
+                        <a id="comb-feedbackward" class="feedbackward-button" href="#">-</a>
+                    </div>
+                    <div id="comb-alpha" class="slider"><div></div></div>
+                    <div id="comb-delay" class="slider-small"><div></div></div>
+                </li>
+                <li>
+                    <a id="off-select" class="select-button" href="#">Select</a>
+                    <span>Off</span>
+                </li>                
+            </ul>
+
+
+            <div class="audio-playback">
+                <div class="column">
+                    <a id="track01-play" class="play-button" href="#">Play</a>
+                    <a id="track01-stop" class="stop-button" href="#">Stop</a>
+                    <span>Funky guitar</span>
+
+                    <a id="track02-play" class="play-button" href="#">Play</a>
+                    <a id="track02-stop" class="stop-button" href="#">Stop</a>
+                    <span>Saxophone</span>
+
+                    <a id="track03-play" class="play-button" href="#">Play</a>
+                    <a id="track03-stop" class="stop-button" href="#">Stop</a>
+                    <span>Jazz piano</span>
+
+                    <a id="track04-play" class="play-button" href="#">Play</a>
+                    <a id="track04-stop" class="stop-button" href="#">Stop</a>
+                    <span>Ocean</span>
+                </div>
+                <div class="column">
+                    <a id="track05-play" class="play-button" href="#">Play</a>
+                    <a id="track05-stop" class="stop-button" href="#">Stop</a>
+                    <span>Drum &amp; bass</span>
+
+                    <a id="track06-play" class="play-button" href="#">Play</a>
+                    <a id="track06-stop" class="stop-button" href="#">Stop</a>
+                    <span>Hiphop beat</span>
+
+                    <a id="track07-play" class="play-button" href="#">Play</a>
+                    <a id="track07-stop" class="stop-button" href="#">Stop</a>
+                    <span>Breakbeat</span>
+                    
+                    <a id="track08-play" class="play-button" href="#">Play</a>
+                    <a id="track08-stop" class="stop-button" href="#">Stop</a>                
+                    <span>Psytrance</span>
+                </div>                    
+            </div>
+
+            <div id="web-audio-enabled" class="enable-light"></div>
+            <div id="silverlight-enabled" class="enable-light"></div>
+
+            <div id="tooltip"><span>TOOLTIP</span></div>
+        </div>
+
+        <script type="text/javascript">var require = { baseUrl: 'js', urlArgs: 'bust='+new Date().getTime() };</script>
+        <script data-main="main" src="js/lib/require.js"></script>        
+        <!-- <script src="js/filter-explorer.min.js"></script> -->
+    </body>
+</html>
