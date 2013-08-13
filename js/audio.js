@@ -13,12 +13,14 @@ define(
         context: null,
         buffers: [],
 
+
         // Attempts to initialize the audio context, and creates a script processor node 
         // which will be responsible for the actual signal processing. The `processs` callback
         // is the method which runs the currently active filter over the queued audio buffer.
         init: function(process) {
             if (webkitAudioContext) {
                 this.context = new webkitAudioContext();
+                this.context.createScriptProcessor = this.context.createScriptProcessor || this.context.createJavaScriptNode;
                 this.processor = this.context.createScriptProcessor(2048);
                 this.processor.onaudioprocess = process;
                 this.processor.connect(this.context.destination);
@@ -54,6 +56,8 @@ define(
             this.source = this.context.createBufferSource();
             this.source.buffer = this.buffers[file];
             this.source.connect(this.processor);
+            this.source.start = this.source.start || this.source.noteOn;
+            this.source.stop = this.source.stop || this.source.noteOff;
             this.source.start(0);
         },
 

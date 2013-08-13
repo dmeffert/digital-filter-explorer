@@ -59,6 +59,14 @@ module.exports = function(grunt) {
           template: 'docco-mathjax.jst'
         }
       }
+    },
+    connect: {
+      server: {
+        options: {
+          port: 9000,
+          keepalive: true
+        }
+      }
     }
   });
 
@@ -66,5 +74,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-docco');
+  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.registerTask('default', ['cssmin', 'requirejs']);
 };
